@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import axios from 'axios';
+import { EventEmitter } from 'events';
 
 
 class App extends Component {
@@ -61,6 +62,28 @@ constructor(props) {
     })
   };
 
+  deleteFromDB = idToDelete => {
+    let objectIdToDelete = null;
+
+    this.state.data.forEach(dat => {
+      if (String(dat.id)=== String(idToDelete)) {
+        objectIdToDelete =dat.id;
+      }
+    });
+
+    axios( {
+      url: 'http://localhost:3001/api/postData',
+      method: 'DELETE',
+      data: {
+        objectIdToDelete
+      }
+    }).then((response) => {
+      console.log(response);
+    }).then((error) => {
+      console.log(error);
+    });
+  }
+
   renderListItems() {
     //Destructing the data object from our state object
     const { data } = this.state;
@@ -96,12 +119,15 @@ constructor(props) {
       </div>
 
       <div>
-        <input />
-        <button>DELETE</button>
+        <input type='text'
+        placeholder='Enter ID of Item to Delete'
+        onChange={event => this.setState({idToDelete: event.target.value})} />
+        <button onClick={() => this.deleteFromDB(this.state.idToDelete)}>DELETE</button>
       </div>
 
       <div>
-        <input />
+        <input type='text'
+        placeholder='Update'/>
         <input />
         <button>UPDATE</button>
       </div>

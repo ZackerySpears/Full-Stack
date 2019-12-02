@@ -83,6 +83,17 @@ router.post('/postData', (req, res) => {
     });
 });
 
+//Route to delete a given object from our database
+router.delete('/deleteData', (req, res) => {
+    Data.deleteOne({id: req.body.id }, err => {
+        if (err) {
+            return res.json({ success: false, error: err});
+        } else {
+            return res.json({success: true});
+        }
+    }); 
+});
+
 //Tell Express to use a certain path and to use the router we set up 
 app.use('/api', router);
 
