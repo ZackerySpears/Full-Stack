@@ -66,13 +66,13 @@ constructor(props) {
     let objectIdToDelete = null;
 
     this.state.data.forEach(dat => {
-      if (String(dat.id)=== String(idToDelete)) {
+      if (String(dat.id) === String(idToDelete)) {
         objectIdToDelete =dat.id;
       }
     });
 
     axios( {
-      url: 'http://localhost:3001/api/postData',
+      url: 'http://localhost:3001/api/deleteData',
       method: 'DELETE',
       data: {
         objectIdToDelete
@@ -83,6 +83,29 @@ constructor(props) {
       console.log(error);
     });
   }
+
+    updateToDB = (idToUpdate, newMessage) => {
+    let objectIdToUpdate = null;
+    
+      this.state.data.forEach( dat => {
+        if (String(dat.id) === String(idToUpdate)) {
+          objectIdToUpdate =dat.id;
+        }
+      });
+
+      axios({
+        url:'http://localhost:3001/api/updateData',
+        method: 'POST',
+        data: {
+          id: objectIdToUpdate,
+          update: {message: newMessage }
+        }
+      }).then((response) => {
+        console.log(response);
+      }).then((error) => {
+        console.log(error);
+      });
+    }
 
   renderListItems() {
     //Destructing the data object from our state object
@@ -127,9 +150,14 @@ constructor(props) {
 
       <div>
         <input type='text'
-        placeholder='Update'/>
-        <input />
-        <button>UPDATE</button>
+        placeholder='Enter ID of Item to Update'
+        onChange={event => this.setState({idToUpdate: event.target.value})}
+        />
+        <input type='text'
+        placeholder='Enter New Value of Item'
+        onChange={event => this.setState({idToUpdate: event.target.value})}
+        />
+        <button onClick={() => this.updateToDB(this.state.idToUpdate, this.state.message)}>UPDATE</button>
       </div>
 
     </div>

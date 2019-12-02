@@ -94,6 +94,17 @@ router.delete('/deleteData', (req, res) => {
     }); 
 });
 
+//Route to update an existing object in our database
+router.post('/updateDate', (req, res) => {
+    Data.updateOne({id: req.body.id}, req.body.update, err => {
+        if (err) {
+            return res.json({ success: false, error: err});
+        } else {
+            return res.json({success: true});
+        }
+    });
+});
+
 //Tell Express to use a certain path and to use the router we set up 
 app.use('/api', router);
 
